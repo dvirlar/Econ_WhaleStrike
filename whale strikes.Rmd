@@ -1,0 +1,53 @@
+---
+title: "Whale Strike Memo"
+author: "Daphne Virlar & Eva Marrero"
+date: "5/15/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#load libraries
+library(tidyverse)
+
+
+#read in the data
+whale <- read.csv("HW3Data.csv")
+
+```
+
+
+
+1. Create a linear probability model that predicts a respondent’s probability of voting ‘yes’ on the ballot based on their age, income, NEP score, the risk reduction offered by the program, and the cost of the program to that respondent. Show the model and interpret the regression coefficients.
+```{r}
+model <- lm(vote ~ age + income + NEP + risk + bid, data = whale)$coefficients
+      #re-level so "yes" is the base line vote response
+      #continuous variable --> how much vote would change given a change in the coefficient
+model[1]
+
+summary(model)
+  intercept <- model[1]
+  agetothirty <- model[5]
+  agetoforty <- model[3]
+  agetofifty <- model[2]
+  agetosixty <- model[4]
+  poor <- model[7]
+  rich <- model[8]
+  very_rich <- model[9]
+  one_percent <- model[6]
+  NEP <- model[10]
+  risk <- model[11]
+  bid <- model[12]
+
+  
+```
+Tricks of the trade: Page Break. When knitting to html, page break will only appear whe you try to print or print to pdf. 
+<P style="page-break-before: always">
+
+
+Whale Strike Model: $$Y_{yes} = `r {round(intercept,4)}` + (`r {round(agetothirty,4)}`*Age To Thirty) + (`r {round(agetoforty,4)}`*AgeToForty) + (`r {round(agetofifty,4)}`*AgeToFifty) + (`r {round(agetosixty,4)}`*AgeToSixty) +$$ 
+$$(`r {round(poor,4)}`*Poor) + (`r {round(rich,4)}`*Rich) + 
+(`r {round(very_rich,4)}`*Very Rich) + (`r {round(one_percent,4)}`* One Percent)$$ 
